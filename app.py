@@ -11,7 +11,6 @@ data = pd.read_csv("data/raw/owid-covid-data.csv", parse_dates=['date'])
 selected_cols = ["iso_code",
                  "location",
                  "date",
-                 "continent",
                  "new_cases_smoothed",
                  "stringency_index",
                  "population",

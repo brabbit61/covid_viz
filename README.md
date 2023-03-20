@@ -14,7 +14,7 @@ This repository hosts the dasboard for COVID-19 data released by [*Our World in 
 
 ## Usage 
 
-This Dash based python dashboard is designed to provide travelers with COVID-19 information for them to assess their risk of contacting the disease while traveling to different countries. The dashboard has been designed to give the user flexibility to view the rise in daily cases and the stringency of the COVID-19 policies applied by different countries using various filtering options. If users are interested to know if countries with similar characteristics have similar COVID-19 statistics, they can used the slider to filter countries based on their GDP and population density. There is also a date slider in the bottom of the dashboard to allow users to select a date interval if they are interested in knowing the progress of the pandemic in its earlier stages.
+This Dash based python dashboard is designed to provide travelers with COVID-19 information for them to assess their risk of contacting the disease while traveling to different countries. The dashboard has been designed to give the user flexibility to view the rise in daily cases and the stringency of the COVID-19 policies applied by different countries using various filtering options. If users are interested to know if countries with similar characteristics have similar COVID-19 statistics, they can used the slider to filter countries based on their GDP and population. There is also a date slider in the bottom of the dashboard to allow users to select a date interval if they are interested in knowing the progress of the pandemic in its earlier stages.
 
 The 2 types of visualizations included are:
 - A line plot showing the change in the stringency index of a country over time, which reflects the strictness of government response due to the pandemic. 
@@ -22,7 +22,7 @@ The 2 types of visualizations included are:
 
 *The brief questions answered by this dashboard would be:* 
 - As a traveler one would want to know the current COVID stringency situation at the destination country.
-- Study the impact of COVID on different countries based on GDP and population density.
+- Study the impact of COVID on different countries based on GDP and population.
 - Study a particular country based on timeline to see how it was impacted over the months due to COVID.
 
 <br>
