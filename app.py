@@ -28,11 +28,13 @@ countries = [{"label": "Worldwide", "value": "Worldwide"}]
 countries.extend([{"label": l, "value": l} for l in list(data['location'].unique())])
 
 app.layout = dbc.Container(
-    dbc.Row([
-        dbc.Col([
+    # dbc.Row([
+    #     dbc.Col([
+        html.Div([
             html.H1('Covid Visualisation'),
             dbc.Row([
-                dbc.Col([
+                dbc.Col(width = 4, 
+                        children=[
                     dbc.Card([
                         dbc.CardHeader('Parameters', style={'fontWeight': 'bold'}),
                         html.Label("Select Country"),
@@ -51,7 +53,7 @@ app.layout = dbc.Container(
                                 data['population'].min(),
                                 data['population'].max(),
                                 step=None,
-                                value=[300_000, 400_000_000],
+                                value=[120_000_000, 400_000_000],
                                 id='population_slider',
                         )),
                         html.Br(),
@@ -83,33 +85,37 @@ app.layout = dbc.Container(
                         ),
                     ]),
                 ]),                     
-                dbc.Col([
-                    dbc.Card([
-                        dbc.CardHeader('Stringency Index', style={'fontWeight': 'bold'}),
-                        dbc.CardBody(
-                            [   html.H6(id="stringency-subtitle"),
-                                html.Iframe(
-                                id='stringency-index-plot',
-                                style={'border-width': '0', 'width': '100%', 'height': '400px'}
-                            )],
-                        )
-                    ])
-                ]),
-                dbc.Col([
-                    dbc.Card([
-                        dbc.CardHeader('New Deaths', style={'fontWeight': 'bold'}),
-                        dbc.CardBody(
-                            [   html.H6(id="new-deaths-subtitle"),
-                                html.Iframe(
-                                id='new-deaths-plot',
-                                style={'border-width': '0', 'width': '100%', 'height': '400px'}
-                            )],
-                        )
-                    ])
-                ])
+                dbc.Col(width=8, 
+                        children=[
+                            dbc.Row([
+                                dbc.Card([
+                                dbc.CardHeader('Stringency Index', style={'fontWeight': 'bold'}),
+                                dbc.CardBody(
+                                    [   html.H6(id="stringency-subtitle"),
+                                        html.Iframe(
+                                        id='stringency-index-plot',
+                                        style={'border-width': '0', 'width': '100%', 'height': '400px'}
+                                    )],
+                                )
+                                ])            
+                            ]),
+                            dbc.Row([
+                                dbc.Card([
+                                dbc.CardHeader('New Deaths', style={'fontWeight': 'bold'}),
+                                dbc.CardBody(
+                                    [   html.H6(id="new-deaths-subtitle"),
+                                        html.Iframe(
+                                        id='new-deaths-plot',
+                                        style={'border-width': '0', 'width': '100%', 'height': '400px'}
+                                    )],
+                                )
+                            ])
+                            ])
+                        ]),
             ])
-        ])
-    ])
+    ]),
+        style={"border-width": "1px", "padding": "1px"}#     ])
+    # ])
 )
 
 
@@ -138,6 +144,9 @@ def update_stringency_plot(country,
         fig = alt.Chart(country_data, title=f'Stringency Index in {country}').mark_line().encode(
             x=alt.X("date", title="Date"),
             y=alt.Y("stringency_index", title="Stringency index")
+        ).properties(
+            width=600,
+            height=250
         )
     else:
         population_filter = (data['population'] >= population[0]) & (data['population'] <= population[1])
@@ -153,6 +162,9 @@ def update_stringency_plot(country,
             x=alt.X("date", title="Date"),
             y=alt.Y("stringency_index", title="Stringency index"),
             color=alt.Color("location")
+        ).properties(
+            width=600,
+            height=400
         )
     
     return fig.to_html(), subtitle_text
@@ -181,7 +193,11 @@ def update_deaths_plot( country,
             x=alt.X("new_cases_smoothed", title="Daily Cases"),
             y=alt.Y("location", title="Country", sort="-x"),
             color=alt.Color("location")
+        ).properties(
+            width=600,
+            height=250
         )
+
     else:
         population_filter = (data['population'] >= population[0]) & (data['population'] <= population[1])
         gdp_filter = (data['gdp_per_capita'] >= gdp_per_capita[0]) & (data['gdp_per_capita'] <= gdp_per_capita[1])
@@ -199,6 +215,9 @@ def update_deaths_plot( country,
             x=alt.X("new_cases_smoothed", title="Daily Cases"),
             y=alt.Y("location", title="Countries", sort="-x"),
             color=alt.Color("location")
+        ).properties(
+            width=600,
+            height=250
         )
     
     return fig.to_html(), subtitle_text
