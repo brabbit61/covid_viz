@@ -5,8 +5,8 @@ import altair as alt
 from vega_datasets import data
 
 alt.data_transformers.enable('data_server')
-alt.renderers.enable('mimetype')
-alt.renderers.enable('png')
+# alt.renderers.enable('mimetype')
+# alt.renderers.enable('png')
 alt.renderers.enable('svg')
 
 cars = data.cars()
