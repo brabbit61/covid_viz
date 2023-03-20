@@ -101,11 +101,11 @@ app.layout = dbc.Container(
                             ]),
                             dbc.Row([
                                 dbc.Card([
-                                dbc.CardHeader('New Deaths', style={'fontWeight': 'bold'}),
+                                dbc.CardHeader('New Cases', style={'fontWeight': 'bold'}),
                                 dbc.CardBody(
-                                    [   html.H6(id="new-deaths-subtitle"),
+                                    [   html.H6(id="new-cases-subtitle"),
                                         html.Iframe(
-                                        id='new-deaths-plot',
+                                        id='new-cases-plot',
                                         style={'border-width': '0', 'width': '100%', 'height': '400px'}
                                     )],
                                 )
@@ -170,14 +170,14 @@ def update_stringency_plot(country,
     return fig.to_html(), subtitle_text
 
 @app.callback(
-    Output('new-deaths-plot', "srcDoc"),
-    Output('new-deaths-subtitle', "children"),
+    Output('new-cases-plot', "srcDoc"),
+    Output('new-cases-subtitle', "children"),
     Input('country-dropdown', "value"),
     Input('population_slider', "value"),
     Input('gdp_slider', "value"),
     Input('date-range', "start_date"),
     Input('date-range', "end_date"))
-def update_deaths_plot( country, 
+def update_cases_plot( country, 
                         population,
                         gdp_per_capita, 
                         start_date,
@@ -189,7 +189,7 @@ def update_deaths_plot( country,
     if country != "Worldwide":
         country_data = data[data['location'] == country]
         country_data = country_data[country_data['date'] == end_date]
-        fig = alt.Chart(country_data, title=f'Daily new deaths in {country}').mark_bar().encode(
+        fig = alt.Chart(country_data, title=f'Daily new cases in {country}').mark_bar().encode(
             x=alt.X("new_cases_smoothed", title="Daily Cases"),
             y=alt.Y("location", title="Country", sort="-x"),
             color=alt.Color("location")
@@ -205,13 +205,8 @@ def update_deaths_plot( country,
         countries_data = data[gdp_filter & population_filter]
         countries_data = countries_data[countries_data['date'] == end_date]
         if len(countries_data) == 0:
-            subtitle_text = "No countries match your filters."
-        # cons = list(countries_data['location'].unique())
-        # if len(cons) > 7:
-        #     cons = cons[:7]
-        # countries_data = countries_data[countries_data['location'] in cons]
-        
-        fig = alt.Chart(countries_data, title='Top Daily new deaths in the filtered countries').mark_bar().encode(
+            subtitle_text = "No countries match your filters."        
+        fig = alt.Chart(countries_data, title='Top Daily new cases in the filtered countries').mark_bar().encode(
             x=alt.X("new_cases_smoothed", title="Daily Cases"),
             y=alt.Y("location", title="Countries", sort="-x"),
             color=alt.Color("location")
