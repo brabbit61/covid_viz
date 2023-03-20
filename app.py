@@ -4,6 +4,7 @@ import pandas as pd
 import altair as alt
 from vega_datasets import data
 
+alt.data_transformers.enable('data_server')
 
 cars = data.cars()
 data = pd.read_csv("data/raw/owid-covid-data.csv", parse_dates=['date'])
@@ -86,10 +87,11 @@ app.layout = dbc.Container(
                     dbc.Card([
                         dbc.CardHeader('Stringency Index', style={'fontWeight': 'bold'}),
                         dbc.CardBody(
-                            html.Iframe(
+                            [   html.H6(id="stringency-subtitle"),
+                                html.Iframe(
                                 id='stringency-index-plot',
                                 style={'border-width': '0', 'width': '100%', 'height': '400px'}
-                            ),
+                            )],
                         )
                     ])
                 ])
@@ -99,8 +101,10 @@ app.layout = dbc.Container(
 )
 
 
+
 @app.callback(
     Output('stringency-index-plot', "srcDoc"),
+    Output('stringency-subtitle', "children"),
     Input('country-dropdown', "value"),
     Input('population_slider', "value"),
     Input('gdp_slider', "value"),
@@ -112,37 +116,34 @@ def update_histogram(country,
                      start_date,
                      end_date):
     
+    subtitle_text = ""
     start_date = pd.to_datetime(start_date)
     end_date = pd.to_datetime(end_date)
     if country != "Worldwide":
         country_data = data[data['location'] == country]
         country_data = country_data[(country_data['date'] >= start_date) &
                                     (country_data['date'] <= end_date)]
-        print("COuntry shape")
-        print(country_data.shape)
         fig = alt.Chart(country_data, title=f'Stringency Index in {country}').mark_line().encode(
             x=alt.X("date", title="Date"),
             y=alt.Y("stringency_index", title="Stringency index")
         )
     else:
-        print("worldwide shape")
-        # new_data = data.head(10000)
-        population_filter = data['population'] >= population[0]# & data['population'] <= population[1]
-        print("popultion")
-        gdp_filter = data['gdp_per_capita'] >= gdp_per_capita[0]# & data['gdp_per_capita'] <= gdp_per_capita[1]
-        print("gdp")
+        population_filter = (data['population'] >= population[0]) & (data['population'] <= population[1])
+        gdp_filter = (data['gdp_per_capita'] >= gdp_per_capita[0]) & (data['gdp_per_capita'] <= gdp_per_capita[1])
+
         countries_data = data[gdp_filter & population_filter]
         countries_data = countries_data[(countries_data['date'] >= start_date) &
                                     (countries_data['date'] <= end_date)]
-        
-        print(countries_data.head())
+        if len(countries_data) == 0:
+            subtitle_text = "No countries match your filters."
+            
         fig = alt.Chart(countries_data, title='Stringency Index in the filtered countries').mark_line().encode(
             x=alt.X("date", title="Date"),
             y=alt.Y("stringency_index", title="Stringency index"),
-            # color=alt.Color("location")
+            color=alt.Color("location")
         )
-    print(fig)
-    return fig.to_html()
+    
+    return fig.to_html(), subtitle_text
     # return None
 
 if __name__ == '__main__':
