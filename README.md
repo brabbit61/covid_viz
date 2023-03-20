@@ -67,3 +67,8 @@ Interested in contributing? Check out the [contributing guidelines](CONTRIBUTING
 ## License 
 
 `covid_viz` was created using Dash visualization by Jenit Jain. It is licensed under the terms of the [MIT license](LICENSE).
+
+## References
+
+- [Our World in Data](https://ourworldindata.org/coronavirus)
+- [Dataset](https://github.com/owid/covid-19-data/tree/master/public/data)
