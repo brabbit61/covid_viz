@@ -9,6 +9,7 @@ alt.renderers.enable('default')
 # alt.renderers.enable('mimetype')
 # alt.renderers.enable('png')
 # alt.renderers.enable('svg')
+alt.data_transformers.disable_max_rows()
 
 data = pd.read_csv("data/raw/owid-covid-data.csv", parse_dates=['date'])
 selected_cols = ["iso_code",
