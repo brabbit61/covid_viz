@@ -8,6 +8,10 @@
 
 -   Jenit Jain
 
+## Link to the app
+
+https://covid-dash-app.onrender.com
+
 ## Overview 
 
 This repository hosts the dasboard for COVID-19 data released by [*Our World in Data*](https://ourworldindata.org/coronavirus) which is present in the this [repository](https://github.com/owid/covid-19-data/tree/master/public/data) and are completely open access under the [Creative Commons BY license](https://creativecommons.org/licenses/by/4.0/). The motivation, purpose, description of data and research question can be found in our [proposal](https://github.com/UBC-MDS/covid_viz/blob/main/reports/proposal.md).
@@ -29,7 +33,7 @@ The 2 types of visualizations included are:
 
 <!-- # Dashboard Demo
 
-![](img/ezgif.com-video-to-gif.gif) --> -->
+![](img/ezgif.com-video-to-gif.gif) -->
 
 ## Get involved 
 

@@ -5,6 +5,9 @@ import altair as alt
 from vega_datasets import data
 
 alt.data_transformers.enable('data_server')
+alt.renderers.enable('mimetype')
+alt.renderers.enable('png')
+alt.renderers.enable('svg')
 
 cars = data.cars()
 data = pd.read_csv("data/raw/owid-covid-data.csv", parse_dates=['date'])
