@@ -2,13 +2,8 @@ from dash import dash, html, Input, Output, dcc
 import dash_bootstrap_components as dbc
 import pandas as pd
 import altair as alt
-# from vega_datasets import data
 
-# alt.data_transformers.enable('data_server')
 alt.renderers.enable('default')
-# alt.renderers.enable('mimetype')
-# alt.renderers.enable('png')
-# alt.renderers.enable('svg')
 alt.data_transformers.disable_max_rows()
 
 data = pd.read_csv("data/raw/owid-covid-data.csv", parse_dates=['date'])
@@ -69,7 +64,6 @@ app.layout = dbc.Container(
                                 data['gdp_per_capita'].max(),
                                 step=None,
                                 value=[2000, 12000],
-                                # marks={i:str(i) for i in range(10)},
                                 id='gdp_slider',
                         )),
                         html.Br(),
@@ -118,8 +112,6 @@ app.layout = dbc.Container(
                         ]),
             ])
     ]),
-        # style={"border-width": "1px", "padding": "1px"}#     ])
-    # ])
 )
 
 
@@ -145,7 +137,6 @@ def update_stringency_plot(country,
         country_data = data[data['location'] == country]
         country_data = country_data[(country_data['date'] >= start_date) &
                                     (country_data['date'] <= end_date)]
-        # plt.plot()
         fig = alt.Chart(country_data, title=f'Stringency Index in {country}').mark_line().encode(
             x=alt.X("date", title="Date"),
             y=alt.Y("stringency_index", title="Stringency index")
