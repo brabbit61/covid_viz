@@ -21,6 +21,7 @@ data = data[selected_cols]
 
 data = data[~data["iso_code"].str.contains("OWID")]
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+server = app.server
 date_labels = pd.date_range(data['date'].min(), data['date'].max(), freq="3M")
 date_marks = {int(d.timestamp()):d.strftime('%Y-%m-%d') for d in date_labels}
 
