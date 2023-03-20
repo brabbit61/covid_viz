@@ -4,7 +4,7 @@ import pandas as pd
 import altair as alt
 # from vega_datasets import data
 
-alt.data_transformers.enable('data_server')
+# alt.data_transformers.enable('data_server')
 alt.renderers.enable('default')
 # alt.renderers.enable('mimetype')
 # alt.renderers.enable('png')
