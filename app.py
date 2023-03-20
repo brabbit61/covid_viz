@@ -21,7 +21,6 @@ data = data[selected_cols]
 
 data = data[~data["iso_code"].str.contains("OWID")]
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
-print(app.server)
 server = app.server
 date_labels = pd.date_range(data['date'].min(), data['date'].max(), freq="3M")
 date_marks = {int(d.timestamp()):d.strftime('%Y-%m-%d') for d in date_labels}
@@ -30,14 +29,13 @@ countries = [{"label": "Worldwide", "value": "Worldwide"}]
 countries.extend([{"label": l, "value": l} for l in list(data['location'].unique())])
 
 app.layout = dbc.Container(
-    # dbc.Row([
-    #     dbc.Col([
         html.Div([
             html.H1('Covid Visualisation'),
-            dbc.Row([
-                dbc.Col(width = 4, 
+            dbc.Row(children=[
+                dbc.Col(width = 4,
                         children=[
-                    dbc.Card([
+                    dbc.Card(style={"height": "865px"},
+                        children=[
                         dbc.CardHeader('Parameters', style={'fontWeight': 'bold'}),
                         html.Label("Select Country"),
                         html.Br(),
@@ -87,28 +85,29 @@ app.layout = dbc.Container(
                         ),
                     ]),
                 ]),                     
-                dbc.Col(width=8, 
+                dbc.Col(width=8,
                         children=[
-                            dbc.Row([
-                                dbc.Card([
+                            dbc.Row(children=[
+                                dbc.Card(style={"height": "100%"},
+                                         children=[
                                 dbc.CardHeader('Stringency Index', style={'fontWeight': 'bold'}),
                                 dbc.CardBody(
                                     [   html.H6(id="stringency-subtitle"),
                                         html.Iframe(
                                         id='stringency-index-plot',
-                                        style={'border-width': '0', 'width': '100%', 'height': '400px'}
+                                        style={'width': '850px', 'height': '340px'}
                                     )],
                                 )
                                 ])            
                             ]),
                             dbc.Row([
-                                dbc.Card([
+                                dbc.Card(children=[
                                 dbc.CardHeader('New Cases', style={'fontWeight': 'bold'}),
                                 dbc.CardBody(
                                     [   html.H6(id="new-cases-subtitle"),
                                         html.Iframe(
                                         id='new-cases-plot',
-                                        style={'border-width': '0', 'width': '100%', 'height': '400px'}
+                                        style={'width': '850px', 'height': '340px'}
                                     )],
                                 )
                             ])
@@ -116,7 +115,7 @@ app.layout = dbc.Container(
                         ]),
             ])
     ]),
-        style={"border-width": "1px", "padding": "1px"}#     ])
+        # style={"border-width": "1px", "padding": "1px"}#     ])
     # ])
 )
 
@@ -147,7 +146,7 @@ def update_stringency_plot(country,
             x=alt.X("date", title="Date"),
             y=alt.Y("stringency_index", title="Stringency index")
         ).properties(
-            width=600,
+            width=650,
             height=250
         )
     else:
@@ -165,8 +164,8 @@ def update_stringency_plot(country,
             y=alt.Y("stringency_index", title="Stringency index"),
             color=alt.Color("location")
         ).properties(
-            width=600,
-            height=400
+            width=650,
+            height=250
         )
     
     return fig.to_html(), subtitle_text
@@ -208,6 +207,11 @@ def update_cases_plot( country,
         countries_data = countries_data[countries_data['date'] == end_date]
         if len(countries_data) == 0:
             subtitle_text = "No countries match your filters."        
+        unique_countries = countries_data['location'].unique().tolist()
+        
+        if len(unique_countries) > 7:
+            unique_countries = unique_countries[:7]
+        countries_data = countries_data[countries_data['location'].isin(unique_countries)]
         fig = alt.Chart(countries_data, title='Top Daily new cases in the filtered countries').mark_bar().encode(
             x=alt.X("new_cases_smoothed", title="Daily Cases"),
             y=alt.Y("location", title="Countries", sort="-x"),
