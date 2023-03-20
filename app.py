@@ -2,14 +2,14 @@ from dash import dash, html, Input, Output, dcc
 import dash_bootstrap_components as dbc
 import pandas as pd
 import altair as alt
-from vega_datasets import data
+# from vega_datasets import data
 
 alt.data_transformers.enable('data_server')
+alt.renderers.enable('default')
 # alt.renderers.enable('mimetype')
 # alt.renderers.enable('png')
-alt.renderers.enable('svg')
+# alt.renderers.enable('svg')
 
-cars = data.cars()
 data = pd.read_csv("data/raw/owid-covid-data.csv", parse_dates=['date'])
 selected_cols = ["iso_code",
                  "location",
@@ -144,6 +144,7 @@ def update_stringency_plot(country,
         country_data = data[data['location'] == country]
         country_data = country_data[(country_data['date'] >= start_date) &
                                     (country_data['date'] <= end_date)]
+        # plt.plot()
         fig = alt.Chart(country_data, title=f'Stringency Index in {country}').mark_line().encode(
             x=alt.X("date", title="Date"),
             y=alt.Y("stringency_index", title="Stringency index")
